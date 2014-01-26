@@ -5,7 +5,7 @@ Starter code for Springies team project
 
 Initial Design Document - Springies
 
-Chad Coviel (cmc86)
+Chad Coviel (cmc86);
 Pritam Mathivanan(pm98)
 
 The spring-mass model will consist of at least three distinct classes: Spring, Mass and Force. A class Muscle would extend Spring, and have a few additional methods that are distinct. For example, a method might consider the number of muscle units that are contracting and relaxing simultaneously or take into account muscle fatigue from previous work. Such methods would not be needed in the Spring class because we hope to simulate an ideal spring-mass model. 
