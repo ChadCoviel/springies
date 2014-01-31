@@ -2,6 +2,8 @@ import jboxGlue.PhysicalObjectRect;
 import jboxGlue.PhysicalObject;
 import jgame.JGColor;
 
+//import package SpringAndMass;
+
 public class Mass extends PhysicalObjectRect{
 
 	//private int myMass;
@@ -9,11 +11,18 @@ public class Mass extends PhysicalObjectRect{
 	//to the spring (ie hook points)
 	private double hookX,hookY;
 			
+	//height and width
+	private double myHeight,myWidth;
+	
 	//constructor for our Mass
 	public Mass(int collisionId,double width,double height, 
 			double xCoord, double yCoord, double mass,double xVelocity,
 			double yVelocity) {
 		super("mass", collisionId, JGColor.black, width, height, mass);
+		
+		//Height and width of mass
+		myHeight = height;
+		myWidth = width;
 		
 		//Set Mass position
 		this.x = xCoord;
@@ -29,12 +38,13 @@ public class Mass extends PhysicalObjectRect{
 		hookY = y+height/2.0;
 	}
 	
-	
-	
 	//Method to attach the mass to the spring
-	public void attachToSpring(){
-		
+	public void attachToSpring(double springHookX,double springHookY){
+		x = springHookX;
+		y = springHookY+myHeight/2;
 	}
+	
+	
 	
 	
 	
