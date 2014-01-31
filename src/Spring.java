@@ -15,9 +15,20 @@ public class Spring extends PhysicalObject{
 		numZigs = zigs;
 	}
 
+	//Paint the Spring
 	@Override
 	protected void paintShape() {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	//This method will allow us to contract the spring
+	public void stringContract(){
+		
+	}
+	
+	//This method will allow us to stretch the string
+	public void stringStretch(){
 		
 	}
 	
