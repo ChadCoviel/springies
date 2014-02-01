@@ -17,15 +17,14 @@ public class Mass extends PhysicalObjectRect{
 	private double myHeight,myWidth;
 	
 	//constructor for our Mass
-	public Mass(int collisionId,double width,double height, 
-			double xCoord, double yCoord, double mass,double xVelocity,
-			double yVelocity) {
-		super("mass", collisionId, JGColor.black, width, height, mass);
+	public Mass(String id, double xCoord, double yCoord, 
+			double mass,double xVelocity,double yVelocity) {
+		super(id, 1, JGColor.black, 1.0, 1.0, mass);
 		
 		//Height and width of mass
-		myHeight = height;
-		myWidth = width;
-		
+//		myHeight = height;
+//		myWidth = width;
+//		
 		//Set Mass position
 		this.x = xCoord;
 		this.y = yCoord;
@@ -37,7 +36,7 @@ public class Mass extends PhysicalObjectRect{
 		//Default: hook point defined as the midsections of the
 		//top of the mass
 		hookX = x;
-		hookY = y+height/2.0;
+//		hookY = y+height/2.0;
 	}
 	
 	//Method to attach the mass to the spring
