@@ -1,5 +1,7 @@
 package SpringAndMass;
 
+import java.util.Scanner;
+
 import jboxGlue.PhysicalObjectRect;
 import jboxGlue.PhysicalObject;
 import jgame.JGColor;
@@ -17,9 +19,7 @@ public class Mass extends PhysicalObjectRect{
 	private double myHeight,myWidth;
 	
 	//constructor for our Mass
-	public Mass(int collisionId,double width,double height, 
-			double xCoord, double yCoord, double mass,double xVelocity,
-			double yVelocity) {
+	public Mass(int collisionId, double xCoord, double yCoord, double mass) {
 		super("mass", collisionId, JGColor.black, width, height, mass);
 		
 		//Height and width of mass
@@ -46,7 +46,19 @@ public class Mass extends PhysicalObjectRect{
 		y = springHookY+myHeight/2;
 	}
 	
-	
+	public static Mass createMass (Scanner xmltext){
+		int id=xmltext.nextInt();
+		double x=xmltext.nextDouble();
+		double y=xmltext.nextDouble();
+		double mass = xmltext.nextDouble();
+		Mass created;
+		if(mass<0){
+			created = new FixedMass(id,x,y,mass);
+		} else {
+			created = new Mass(id,x,y,mass);
+		}
+		return created;
+	}
 	
 	
 	
