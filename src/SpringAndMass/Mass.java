@@ -20,11 +20,7 @@ public class Mass extends PhysicalObjectRect{
 	public Mass(String id, double xCoord, double yCoord, 
 			double mass,double xVelocity,double yVelocity) {
 		super(id, 1, JGColor.black, 1.0, 1.0, mass);
-		
-		//Height and width of mass
-//		myHeight = height;
-//		myWidth = width;
-//		
+
 		//Set Mass position
 		this.x = xCoord;
 		this.y = yCoord;
@@ -42,7 +38,7 @@ public class Mass extends PhysicalObjectRect{
 	//Method to attach the mass to the spring
 	public void attachToSpring(double springHookX,double springHookY){
 		x = springHookX;
-		y = springHookY+myHeight/2;
+		y = springHookY+1/2;
 	}
 	
 	
