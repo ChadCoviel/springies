@@ -42,7 +42,7 @@ public class Mass extends PhysicalObjectRect{
 	//Method to attach the mass to the spring
 	public void attachToSpring(double springHookX,double springHookY){
 		x = springHookX;
-		y = springHookY+myHeight/2;
+		y = springHookY+1/2;
 	}
 	
 	
