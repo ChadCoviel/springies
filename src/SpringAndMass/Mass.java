@@ -20,24 +20,16 @@ public class Mass extends PhysicalObjectRect{
 	
 	//constructor for our Mass
 	public Mass(int collisionId, double xCoord, double yCoord, double mass) {
-		super("mass", collisionId, JGColor.black, width, height, mass);
-		
-		//Height and width of mass
-		myHeight = height;
-		myWidth = width;
+		super("mass", collisionId, JGColor.black, 1, 1, mass);
 		
 		//Set Mass position
 		this.x = xCoord;
 		this.y = yCoord;
-		
-		//Set initial velocities
-		this.xspeed = xVelocity;
-		this.yspeed = yVelocity;
-		
+				
 		//Default: hook point defined as the midsections of the
 		//top of the mass
 		hookX = x;
-		hookY = y+height/2.0;
+		hookY = y+1/2;
 	}
 	
 	//Method to attach the mass to the spring
@@ -50,10 +42,12 @@ public class Mass extends PhysicalObjectRect{
 		int id=xmltext.nextInt();
 		double x=xmltext.nextDouble();
 		double y=xmltext.nextDouble();
+		
 		double mass = xmltext.nextDouble();
 		Mass created;
 		if(mass<0){
 			created = new FixedMass(id,x,y,mass);
+			
 		} else {
 			created = new Mass(id,x,y,mass);
 		}
