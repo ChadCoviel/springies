@@ -1,16 +1,31 @@
 package SpringAndMass;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+
 public class FixedMass extends Mass {
 
 	//Fixed mass constructor
-	public FixedMass(int collisionId, double xCoord, 
-			double yCoord) {
-		//A fixed mass has no speed. It does not move.
-		super(collisionId, 1.0, 1.0, xCoord, yCoord, 0, 0, 0);
+
+	
+	
+	public FixedMass(int id, double x, double y, double mass) {
 		
-		x = xCoord;
-		y = yCoord;
+		// TODO Auto-generated constructor stub
+		
+		super(id,x,y,mass);
 	}
+
+	public void paint (Graphics2D pen) {
+		
+		pen.setColor(Color.BLACK);
+        pen.fillRect((int) getLeft(), (int) getTop(), (int) getWidth(), (int) getHeight());
+		
+	}
+	
+	//public void update
+	//public void applyForce
 	
 	
 
