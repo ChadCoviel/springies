@@ -1,6 +1,7 @@
 package SpringAndMass;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -30,6 +31,12 @@ public class Muscle extends Spring implements Paint_Update{
 		double kvalue = s.nextDouble();
 		double amplitude = s.nextDouble();
 		return new Muscle(one,two,rest_length,kvalue,amplitude);
+	}
+
+	@Override
+	public void paint(Graphics2D pen) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
