@@ -17,7 +17,7 @@ public class Gravity extends Force{
 	}
 	
 	public Vector forceonMass(Mass m){
-		Vector mforce = new Vector(myGravity.getDirection(), myGravity.getMagnitude());
+		Vector mforce = new Vector(myGravity.getAngle(), myGravity.getMagnitude());
 		mforce.scale(m.getMass()); //implemented by Chad
 		return mforce;
 		
