@@ -4,7 +4,7 @@ import physics.Vector;
 import java.util.Scanner;
 import SpringAndMass.Mass;
 
-public class Gravity {
+public class Gravity extends Force{
 	
 	private static final double ANGLE_CONSTANT = 90;
 	private static final double MAGNITUDE_CONSTANT = 9.8;
@@ -12,6 +12,7 @@ public class Gravity {
 	private Vector myGravity;
 	
 	public Gravity (double ang, double mag) {
+		super(mag,0);
 		myGravity = new Vector(ang,mag);
 	}
 	
