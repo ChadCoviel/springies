@@ -17,10 +17,11 @@ public class FixedMass extends Mass {
 		super(id,x,y,mass);
 	}
 
+	
 	public void paint (Graphics2D pen) {
 		
 		pen.setColor(Color.BLACK);
-        pen.fillRect((int) getLeft(), (int) getTop(), (int) getWidth(), (int) getHeight());
+        pen.fillRect((int) 10, (int) 10, (int) 10, (int) 10);
 		
 	}
 	
