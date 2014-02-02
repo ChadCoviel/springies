@@ -9,6 +9,8 @@ import jgame.JGObject;
 import jgame.platform.JGEngine;
 import org.jbox2d.common.Vec2;
 
+import SpringAndMass.Mass;
+
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine
@@ -72,6 +74,9 @@ public class Springies extends JGEngine
                 myBody.setLinearVelocity(velocity);
             }
         };
+        //Add a mass
+        Mass m = new Mass("m",5,5,10.0,2,2.5);
+        
         ball.setPos(displayWidth() / 2, displayHeight() / 2);
         ball.setForce(8000, -10000);
     }

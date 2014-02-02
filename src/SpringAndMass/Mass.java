@@ -51,6 +51,26 @@ public class Mass extends PhysicalObjectRect{
 		return m;
 	}
 	
+	//Return the x coordinate of this mass
+	public double getX(){
+		return x;
+	}
+	
+	//Return the y coordinate of this mass
+	public double getY(){
+		return y;
+	}
+	
+	//Return the x direction velocity
+	public double getXVelocity(){
+		return xspeed;
+	}
+	
+	//Return the y direction velocity
+	public double getYVelocity(){
+		return yspeed;
+	}
+	
 	@Override
 	public void move(){
 		//Allows the user to grab the mass object

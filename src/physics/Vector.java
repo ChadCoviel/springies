@@ -31,4 +31,16 @@ public class Vector {
 		setMagnitude(magnitude*amount);
 	}
 
+	public double getMagnitude() {
+		return magnitude;
+	}
+
+	 public double getDirection () {
+
+	        final double OFFSET = 0.001;
+	        double sign = (angle < 0) ? 1 : -1;
+	        return ((angle + sign * OFFSET) % 360) - sign * OFFSET;
+	    }
+
+
 }
