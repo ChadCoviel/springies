@@ -14,7 +14,8 @@ public abstract class Force {
 	public Vector deriveForce (double ang, double distance) {
 		Vector derived = new Vector(ang,magnitude);
 		double scaling = 1 / (Math.pow(distance/length,exponent));
-		derived
+		derived.scale(scaling);
+		return derived;
 	}
 	
 }
