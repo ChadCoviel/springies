@@ -22,7 +22,7 @@ public class Spring extends PhysicalObject{
 	
 	private double restLength;
 	
-	public Spring(String mass1, String mass2,int restL,
+	public Spring(String mass1, String mass2,double restL,
 			double K) {
 		super("spring", 1, JGColor.black);
 		
@@ -40,8 +40,7 @@ public class Spring extends PhysicalObject{
 	//Default springyness constructor if no value provided for K
 	public Spring(String mass1, String mass2,int restLength) {
 		super("spring", 1, JGColor.black);
-		// TODO Auto-generated constructor stub
-		
+
 		springyness = 1;
 	}
 
@@ -50,6 +49,12 @@ public class Spring extends PhysicalObject{
 	protected void paintShape() {
 		//Paints a line that represents the String
 		myEngine.drawLine(m1.x,m1.y,m2.x,m2.y);
+		
+		//The position of the object will simply be the midpoint
+		//of the two distance between the two masses to which
+		//it is attached
+		x = Math.abs(m2.x-m1.x);
+		y = Math.abs(m2.y-m1.y);
 	}
 	
 	//This method will allow us to contract the spring
@@ -61,5 +66,18 @@ public class Spring extends PhysicalObject{
 	public void stringStretch(){
 		
 	}
+	
+	@Override
+	public void move(){
+		//Allows the user to grab the spring object
+		while(myEngine.getMouseButton(1) & myEngine.getMouseX() <= this.x + 5
+				& myEngine.getMouseX() >= this.x - 5 & myEngine.getMouseY() >= this.y - 5
+				& myEngine.getMouseY() <= this.y + 5){
+			this.x = myEngine.getMouseX();
+			this.y = myEngine.getMouseY();
+		}
+	}
+	
+	//public void updateMasses
 	
 }

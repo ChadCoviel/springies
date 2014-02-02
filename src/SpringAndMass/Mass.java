@@ -12,6 +12,9 @@ public class Mass extends PhysicalObjectRect{
 	//These integers are used to indicate where the mass is connected
 	//to the spring (ie hook points)
 	private double hookX,hookY;
+	
+	//This object's mass
+	private double m;
 			
 	//height and width
 	private double myHeight,myWidth;
@@ -20,11 +23,9 @@ public class Mass extends PhysicalObjectRect{
 	public Mass(String id, double xCoord, double yCoord, 
 			double mass,double xVelocity,double yVelocity) {
 		super(id, 1, JGColor.black, 1.0, 1.0, mass);
+
+		m = mass;
 		
-		//Height and width of mass
-//		myHeight = height;
-//		myWidth = width;
-//		
 		//Set Mass position
 		this.x = xCoord;
 		this.y = yCoord;
@@ -45,10 +46,19 @@ public class Mass extends PhysicalObjectRect{
 		y = springHookY+1/2;
 	}
 	
+	//Return the mass of the mass
+	public double getMass(){
+		return m;
+	}
 	
-	
-	
-	
-	
-	
+	@Override
+	public void move(){
+		//Allows the user to grab the mass object
+		while(myEngine.getMouseButton(1) & myEngine.getMouseX() <= this.x + myHeight
+				& myEngine.getMouseX() >= this.x - myHeight & myEngine.getMouseY() >= this.y - myHeight
+				& myEngine.getMouseY() <= this.y + myHeight ){
+			this.x = myEngine.getMouseX();
+			this.y = myEngine.getMouseY();
+		}
+	}
 }
