@@ -20,7 +20,7 @@ public class Muscle extends Spring implements Paint_Update{
 
 	public void update (double timePassed, Dimension bounds){
 		muscTime += timePassed;
-		super.update(timePassed, bounds);
+		//super.update(timePassed, bounds);
 	}
 
 	public static Muscle createMuscle (Scanner s, Map<Integer, Mass> massMap){

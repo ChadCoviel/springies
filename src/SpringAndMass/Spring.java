@@ -14,21 +14,18 @@ public class Spring extends PhysicalObject{
 	//The two masses that the spring is connected to
 	private Mass m1,m2;
 	
-	//The string IDs of the masses
-	private String m1Id, m2Id;
-	
 	//Represents the K constant that is a property of springs
 	private double springyness;
 	
 	private double restLength;
 	
-	public Spring(String mass1, String mass2,double restL,
+	public Spring(Mass mass1, Mass mass2,double restL,
 			double K) {
 		super("spring", 1, JGColor.black);
 		
 		//Refer to the two masses
-		m1Id = mass1;
-		m2Id = mass2;
+		m1 = mass1;
+		m2 = mass2;
 		
 		//Springyness constant
 		springyness = K;
@@ -78,6 +75,7 @@ public class Spring extends PhysicalObject{
 		}
 	}
 	
-	//public void updateMasses
-	
+	public void updateMasses(){
+		
+	}
 }
