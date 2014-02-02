@@ -56,5 +56,10 @@ public class Vector {
 		setAngle(this.getAngle()+value);
 	}
 
+	public static double angleBetween(double x, double y) {
+		// TODO Auto-generated method stub
+		return Math.toDegrees(Math.atan2(x, y));
+	}
+
 
 }
