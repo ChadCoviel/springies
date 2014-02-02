@@ -71,6 +71,16 @@ public class Mass extends PhysicalObjectRect{
 		return yspeed;
 	}
 	
+	//Return the magnitude velocity of this mass
+	public double getVelocity(){
+		return (double)Math.sqrt(x*x+y*y);
+	}
+	
+	//Return the angle of the velocity vector
+	public double getVelocityAngle(){
+		return Math.toDegrees(Math.atan2(x, y));
+	}
+	
 	@Override
 	public void move(){
 		//Allows the user to grab the mass object
