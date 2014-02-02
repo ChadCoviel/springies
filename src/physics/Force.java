@@ -2,7 +2,7 @@ package physics;
 
 public abstract class Force {
 	
-	private static final int distance = 50;
+	private static final int length = 50;
 	private double magnitude;
 	private double exponent;
 
@@ -11,8 +11,10 @@ public abstract class Force {
 		exponent = exp;
 	}
 	
-	public Vector createForce (double ang, double length) {
-		Vector 
+	public Vector deriveForce (double ang, double distance) {
+		Vector derived = new Vector(ang,magnitude);
+		double scaling = 1 / (Math.pow(distance/length,exponent));
+		derived
 	}
 	
 }

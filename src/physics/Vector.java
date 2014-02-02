@@ -26,5 +26,9 @@ public class Vector {
 	protected void setMagnitude(double val){
 		magnitude = val;
 	}
+	
+	public void scale (double amount){
+		setMagnitude(magnitude*amount);
+	}
 
 }
