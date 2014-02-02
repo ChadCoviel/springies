@@ -41,10 +41,14 @@ public class Mass extends PhysicalObjectRect{
 		y = springHookY+1/2;
 	}
 	
-	
-	
-	
-	
-	
-	
+	@Override
+	public void move(){
+		//Allows the user to grab the mass object
+		while(myEngine.getMouseButton(1) & myEngine.getMouseX() <= this.x + myHeight
+				& myEngine.getMouseX() >= this.x - myHeight & myEngine.getMouseY() >= this.y - myHeight
+				& myEngine.getMouseY() <= this.y + myHeight ){
+			this.x = myEngine.getMouseX();
+			this.y = myEngine.getMouseY();
+		}
+	}
 }
