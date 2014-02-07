@@ -14,7 +14,7 @@ public class Viscosity extends Force{
 	}
 
 	public Vector visconMass (Mass m){
-		Vector viscos = new Vector(,m.getVelocity());
+		Vector viscos = new Vector(m.getVelocityAngle(),m.getVelocity());
 		viscos.scale(viscos.getMagnitude());
 		viscos.opposite();
 		return viscos;

@@ -1,5 +1,7 @@
 package physics;
 
+import java.awt.geom.Point2D;
+
 public class Vector {
 
 	private double angle;
@@ -35,12 +37,29 @@ public class Vector {
 		return magnitude;
 	}
 
-	 public double getDirection () {
+	 public double getAngle () {
 
 	        final double OFFSET = 0.001;
 	        double sign = (angle < 0) ? 1 : -1;
 	        return ((angle + sign * OFFSET) % 360) - sign * OFFSET;
 	    }
+
+
+
+	public void opposite() {
+		rotate(180);
+
+
+	}
+
+	public void rotate (double value) {
+		setAngle(this.getAngle()+value);
+	}
+
+	public static double angleBetween(double x, double y) {
+		// TODO Auto-generated method stub
+		return Math.toDegrees(Math.atan2(x, y));
+	}
 
 
 }
