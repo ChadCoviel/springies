@@ -84,19 +84,19 @@ public class UserControl extends JGEngine{
 		// Center Of Mass Force
 		if (getKey('M')) {
 			clearKey('M');
-			WorldManager.getWorld().valueCOMMultiplier();
+			WorldManager.getWorld().valueCOMScalar();
 		}
 		
 		// Gravity
 		if (getKey('G')) {
 			clearKey('G');
-			WorldManager.getWorld().valueGravityMultiplier();
+			WorldManager.getWorld().valueGravityScalar();
 		}
 
 		// Viscosity
 		if (getKey('V')) {
 			clearKey('V');
-			WorldManager.getWorld().valueViscosityMultiplier();
+			WorldManager.getWorld().valueViscosityScalar();
 		}
 
 		// Wall Repulsion Force

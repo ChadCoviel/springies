@@ -26,10 +26,10 @@ public class SimulationWorld extends World {
 	private double viscosity = Constants.DEFAULT_VISCOSITY,
 					com_magnitude = Constants.DEFAULT_COM_MAGNITUDE,
 					com_exponent = Constants.DEFAULT_COM_EXPONENT;
-	private float visc_multiplier = Constants.VISCOSITY_SCALAR,
-					g_multiplier = Constants.GRAVITY_SCALAR,
-					com_multiplier = Constants.COM_SCALAR,
-					w_multiplier = Constants.WALL_SCALAR;
+	private float visc_scalar = Constants.VISCOSITY_SCALAR,
+					g_scalar = Constants.GRAVITY_SCALAR,
+					com_scalar = Constants.COM_SCALAR,
+					w_scalar = Constants.WALL_SCALAR;
 	private Vec2 gravity = new Vec2(0, 0);
 
 	public SimulationWorld(AABB worldBounds, Vec2 gravity, boolean doSleep) {
@@ -64,21 +64,21 @@ public class SimulationWorld extends World {
 	}
 	
 	public void setWallMultiplier(float multiplier) {
-		w_multiplier = multiplier;
+		w_scalar = multiplier;
 	}
 	
 	/*Value comparison for the gravity, viscosity and center of mass multipliers.*/
 
-	public void valueCOMMultiplier() {
-		com_multiplier = (com_multiplier == 0 ? Constants.COM_SCALAR : 0);
+	public void valueCOMScalar() {
+		com_scalar = (com_scalar == 0 ? Constants.COM_SCALAR : 0);
 	}
 
-	public void valueGravityMultiplier() {
-		g_multiplier = (g_multiplier == 0 ? Constants.GRAVITY_SCALAR : 0);
+	public void valueGravityScalar() {
+		g_scalar = (g_scalar == 0 ? Constants.GRAVITY_SCALAR : 0);
 	}
 
-	public void valueViscosityMultiplier() {
-		visc_multiplier = (visc_multiplier == 0 ? Constants.VISCOSITY_SCALAR : 0);
+	public void valueViscosityScalar() {
+		visc_scalar = (visc_scalar == 0 ? Constants.VISCOSITY_SCALAR : 0);
 	}
 
 	/**
@@ -101,20 +101,20 @@ public class SimulationWorld extends World {
 		return massList;
 	}
 
-	public float getCOMMultiplier() {
-		return com_multiplier;
+	public float getCOMScalar() {
+		return com_scalar;
 	}
 
-	public float getGravityMultiplier() {
-		return g_multiplier;
+	public float getGravityScalar() {
+		return g_scalar;
 	}
 
-	public float getViscosityMultiplier() {
-		return visc_multiplier;
+	public float getViscosityScalar() {
+		return visc_scalar;
 	}
 
-	public float getWallMultiplier() {
-		return w_multiplier;
+	public float getWallScalar() {
+		return w_scalar;
 	}
 	
 	public void applyForces() {
@@ -139,8 +139,8 @@ public class SimulationWorld extends World {
 	
 	private Vec2 forceGravity(Mass m) {
 		float mass = m.getBody().getMass();
-		return new Vec2(gravity.x * mass * g_multiplier, gravity.y * mass
-				* g_multiplier);
+		return new Vec2(gravity.x * mass * g_scalar, gravity.y * mass
+				* g_scalar);
 	}
 
 	/**
@@ -186,8 +186,8 @@ public class SimulationWorld extends World {
 		for (Mass m : massList) {
 			Vec2 direction = m.getBody().getLinearVelocity();
 			Vec2 oppositeDirection = direction.negate(); 
-			float newX = (float) (oppositeDirection.x * viscosity * visc_multiplier);
-			float newY = (float) (oppositeDirection.y * viscosity * visc_multiplier);
+			float newX = (float) (oppositeDirection.x * viscosity * visc_scalar);
+			float newY = (float) (oppositeDirection.y * viscosity * visc_scalar);
 			Vec2 vForce = new Vec2(newX, newY);
 			m.getBody().applyForce(vForce, m.getBody().getPosition());	
 		}
@@ -235,7 +235,7 @@ public class SimulationWorld extends World {
 					: -1);
 		}
 
-		return (float) (sign * w_multiplier
+		return (float) (sign * w_scalar
 				* Math.pow(1 / distance, w.getExponent()) * w.getMagnitude());
 	}
 
