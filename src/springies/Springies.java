@@ -1,116 +1,186 @@
 package springies;
 
-import jboxGlue.PhysicalObject;
-import jboxGlue.PhysicalObjectCircle;
-import jboxGlue.PhysicalObjectRect;
-import jboxGlue.WorldManager;
-import jgame.JGColor;
-import jgame.JGObject;
-import jgame.platform.JGEngine;
-import org.jbox2d.common.Vec2;
+import java.util.Collection;
 
+import javax.swing.JOptionPane;
+
+import jboxGlue.*;
+import jgame.platform.JGEngine;
+import ourObjects.*;
+
+/**
+ * This class sets up the canvas, calls the WorldManager to initialize the
+ * World, and listens for user interaction through the mouse and keyboard. In
+ * this way, it is able to take appropriate action to toggle certain forces,
+ * drag assemblies, create/destroy assemblies, and change the size of the walled
+ * in area.
+ * 
+ * @author Chandy
+ * 
+ */
 
 @SuppressWarnings("serial")
-public class Springies extends JGEngine
-{
-    public Springies ()
-    {
-        // set the window size
-        int height = 480;
-        double aspect = 16.0 / 9.0;
-        initEngineComponent((int) (height * aspect), height);
-    }
+public class Springies extends JGEngine {
+	private static Parser myParser;
+	private Mass closestMass, mouseMass;
+	private Spring mouseSpring;
+	private boolean isClicked = false;
 
-    @Override
-    public void initCanvas ()
-    {
-        // I have no idea what tiles do...
-        setCanvasSettings(1, // width of the canvas in tiles
-                          1, // height of the canvas in tiles
-                          displayWidth(), // width of one tile
-                          displayHeight(), // height of one tile
-                          null,// foreground colour -> use default colour white
-                          null,// background colour -> use default colour black
-                          null); // standard font -> use default font
-    }
+	public Springies() {
+		// set the window size
+		int height = 480;
+		double aspect = 16.0 / 9.0;
+		initEngine((int) (height * aspect), height);
+	}
 
-    @Override
-    public void initGame ()
-    {
-        setFrameRate(60, 2);
-        // NOTE:
-        //   world coordinates have y pointing down
-        //   game coordinates have y pointing up
-        // so gravity is up in world coords and down in game coords
-        // so set all directions (e.g., forces, velocities) in world coords
-        WorldManager.initWorld(this);
-        WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
-        addBall();
-        addWalls();
-    }
+	@Override
+	public void initCanvas() {
+		// I have no idea what tiles do...
+		setCanvasSettings(1, // width of the canvas in tiles
+				1, // height of the canvas in tiles
+				displayWidth(), // width of one tile
+				displayHeight(), // height of one tile
+				null,// foreground colour -> use default colour white
+				null,// background colour -> use default colour black
+				null // standard font -> use default font
+		);
+	}
 
-    public void addBall ()
-    {
-        // add a bouncy ball
-        // NOTE: you could make this into a separate class, but I'm lazy
-        PhysicalObject ball = new PhysicalObjectCircle("ball", 1, JGColor.blue, 10, 5) {
-            @Override
-            public void hit (JGObject other)
-            {
-                // we hit something! bounce off it!
-                Vec2 velocity = myBody.getLinearVelocity();
-                // is it a tall wall?
-                final double DAMPING_FACTOR = 0.8;
-                boolean isSide = other.getBBox().height > other.getBBox().width;
-                if (isSide) {
-                    velocity.x *= -DAMPING_FACTOR;
-                }
-                else {
-                    velocity.y *= -DAMPING_FACTOR;
-                }
-                // apply the change
-                myBody.setLinearVelocity(velocity);
-            }
-        };
-        ball.setPos(displayWidth() / 2, displayHeight() / 2);
-        ball.setForce(8000, -10000);
-    }
+	/**
+	 * Calls initWorld() in WorldManager and tells the parser to parse the given
+	 * environment and assembly XML files.
+	 */
+	@Override
+	public void initGame() {
+		setFrameRate(60, 2);
+		WorldManager.initWorld(this);
+		myParser = new Parser(displayWidth(), displayHeight());
+		myParser.parseEnvironment("assets/environment.xml");
+		myParser.parseObjects("assets/jello.xml");
+	}
 
-    private void addWalls ()
-    {
-        // add walls to bounce off of
-        // NOTE: immovable objects must have no mass
-        final double WALL_MARGIN = 10;
-        final double WALL_THICKNESS = 10;
-        final double WALL_WIDTH = displayWidth() - WALL_MARGIN * 2 + WALL_THICKNESS;
-        final double WALL_HEIGHT = displayHeight() - WALL_MARGIN * 2 + WALL_THICKNESS;
-        PhysicalObject wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-                                                     WALL_WIDTH, WALL_THICKNESS);
-        wall.setPos(displayWidth() / 2, WALL_MARGIN);
-        wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-                                      WALL_WIDTH, WALL_THICKNESS);
-        wall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
-        wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-                                      WALL_THICKNESS, WALL_HEIGHT);
-        wall.setPos(WALL_MARGIN, displayHeight() / 2);
-        wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-                                      WALL_THICKNESS, WALL_HEIGHT);
-        wall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
-    }
+	/**
+	 * This is called each frame. It tells the world to apply all environmental
+	 * forces and checks for user input.
+	 */
+	@Override
+	public void doFrame() {
+		// update game objects
+		WorldManager.getWorld().step(1f, 1);
+		WorldManager.getWorld().applyForces();
+		checkMouse();
+		checkForcesToggle();
+		checkWallInflation();
+		moveObjects();
+		checkAssemblies();
+	}
 
-    @Override
-    public void doFrame ()
-    {
-        // update game objects
-        WorldManager.getWorld().step(1f, 1);
-        moveObjects();
-        checkCollision(1 + 2, 1);
-    }
+	/**
+	 * If the user clicks, this instantiates a temporary mass and spring to move
+	 * the targeted assembly around the area. The mass and spring are removed
+	 * when the user releases the click.
+	 */
+	private void checkMouse() {
+		if (!isClicked && getMouseButton(1)) {
+			isClicked = true;
+			// clearMouseButton(1);
+			int mx = getMouseX(), my = getMouseY();
+			closestMass = findClosestMass(mx, my);
+			mouseMass = new Mass("mouseMass", mx, my, 0);
+			mouseSpring = new Spring("mouseSpring", mouseMass, closestMass);
+		} else if (isClicked && !getMouseButton(1)) {
+			isClicked = false;
+			mouseMass.remove();
+			mouseMass = null;
+			mouseSpring.remove();
+			mouseSpring = null;
+		}
+		if (isClicked) {
+			mouseMass.setPos(getMouseX(), getMouseY());
+		}
+	}
 
-    @Override
-    public void paintFrame ()
-    {
-        // nothing to do
-        // the objects paint themselves
-    }
+	private Mass findClosestMass(int mx, int my) {
+		Collection<Mass> masses = WorldManager.getWorld().getMasses();
+		double minDist = Integer.MAX_VALUE; // will store the squared distance
+		Mass closest = null;
+		for (Mass m : masses) {
+			if (Math.pow(mx - m.getX(), 2) + Math.pow(my - m.getY(), 2) < minDist) {
+				minDist = Math.pow(mx - m.getX(), 2)
+						+ Math.pow(my - m.getY(), 2);
+				closest = m;
+			}
+		}
+		return closest;
+	}
+
+	private void checkWallInflation() {
+		if (getKey(KeyUp)) {
+			clearKey(KeyUp);
+			WorldManager.getWorld()
+					.inflateWalls(Constants.PIXELS_FOR_INFLATION);
+		} else if (getKey(KeyDown)) {
+			clearKey(KeyDown);
+			WorldManager.getWorld().inflateWalls(
+					-Constants.PIXELS_FOR_INFLATION);
+		}
+	}
+
+	@Override
+	public void paintFrame() {
+		// nothing to do
+		// the objects paint themselves
+	}
+
+	private void checkAssemblies() {
+		if (getKey('C')) {
+			clearKey('C');
+			WorldManager.getWorld().clearObjects();
+		} else if (getKey('N')) {
+			clearKey('N');
+			String file = JOptionPane
+					.showInputDialog("Which assembly would you like to add?"
+							+ " (Just file name with no .xml extension)");
+			myParser.parseObjects("assets/" + file + ".xml");
+		}
+	}
+
+	private void checkForcesToggle() {
+		// Toggle Gravity
+		if (getKey('G')) {
+			clearKey('G');
+			WorldManager.getWorld().toggleGravity();
+		}
+
+		// Toggle Viscosity
+		if (getKey('V')) {
+			clearKey('V');
+			WorldManager.getWorld().toggleViscosity();
+			;
+		}
+
+		// Toggle COM Force
+		if (getKey('M')) {
+			clearKey('M');
+			WorldManager.getWorld().toggleCOM();
+		}
+
+		// Toggle Wall Repulsion
+		if (getKey('1')) {
+			clearKey('1');
+			WorldManager.getWorld().toggleWall(Constants.ID_TOP_WALL);
+		}
+		if (getKey('2')) {
+			clearKey('2');
+			WorldManager.getWorld().toggleWall(Constants.ID_RIGHT_WALL);
+		}
+		if (getKey('3')) {
+			clearKey('3');
+			WorldManager.getWorld().toggleWall(Constants.ID_BOTTOM_WALL);
+		}
+		if (getKey('4')) {
+			clearKey('4');
+			WorldManager.getWorld().toggleWall(Constants.ID_LEFT_WALL);
+		}
+	}
 }
