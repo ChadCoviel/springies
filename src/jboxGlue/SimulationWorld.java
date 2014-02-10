@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
+
 
 import ourObjects.Constants;
 import ourObjects.Mass;
@@ -19,46 +19,24 @@ import walls.WallReposition;
  * 
  */
 
-public class SimulationWorld extends World {
-	private Collection<Mass> massList;
-	private Collection<Spring> springList;
+public class SimulationWorld extends Forces {
+	
+	
 	private Collection<Wall> wallList;
-	private double viscosity = Constants.DEFAULT_VISCOSITY,
-					com_magnitude = Constants.DEFAULT_COM_MAGNITUDE,
-					com_exponent = Constants.DEFAULT_COM_EXPONENT;
 	private float visc_scalar = Constants.VISCOSITY_SCALAR,
 					g_scalar = Constants.GRAVITY_SCALAR,
 					com_scalar = Constants.COM_SCALAR,
 					w_scalar = Constants.WALL_SCALAR;
-	private Vec2 gravity = new Vec2(0, 0);
+	
 
 	public SimulationWorld(AABB worldBounds, Vec2 gravity, boolean doSleep) {
 		super(worldBounds, gravity, doSleep);
-		massList = new ArrayList<Mass>();
-		springList = new ArrayList<Spring>();
 	}
 	
-	public void addMasses(Collection<Mass> masses) {
-		massList.addAll(masses);
-	}
-
-	public void addSprings(Collection<Spring> springs) {
-		springList.addAll(springs);
-	}
-
-	public void setGravity(Vec2 g) {
-		gravity = g;
-	}
+	/*
+	 * Basic set and get methods for functionality between classes and other packages.
+	 * */
 	
-	public void setViscosity(double v) {
-		viscosity = v;
-	}
-
-	public void setCenterOfMass(double magnitude, double exponent) {
-		com_magnitude = magnitude;
-		com_exponent = exponent;
-	}
-
 	public void setWalls(Collection<Wall> walls) {
 		wallList = walls;
 	}
@@ -67,32 +45,6 @@ public class SimulationWorld extends World {
 		w_scalar = multiplier;
 	}
 	
-	/*Value comparison for the gravity, viscosity and center of mass multipliers.*/
-
-	public void valueCOMScalar() {
-		com_scalar = (com_scalar == 0 ? Constants.COM_SCALAR : 0);
-	}
-
-	public void valueGravityScalar() {
-		g_scalar = (g_scalar == 0 ? Constants.GRAVITY_SCALAR : 0);
-	}
-
-	public void valueViscosityScalar() {
-		visc_scalar = (visc_scalar == 0 ? Constants.VISCOSITY_SCALAR : 0);
-	}
-
-	/**
-	 * Pressed key initiates calculation of respective wall repulsion force.
-	 */
-	
-	public void toggleWallForceCalc(String id) {
-		for (Wall w : wallList) {
-			if (w.getId().equals(id)) {
-				w.toggleWallStatus();
-			}
-		}
-	}
-
 	public Collection<Wall> getWalls() {
 		return wallList;
 	}
@@ -117,13 +69,32 @@ public class SimulationWorld extends World {
 		return w_scalar;
 	}
 	
+	/**
+	 * Pressed key initiates calculation of respective wall repulsion force.
+	 */
+	
+	public void toggleWallForceCalc(String id) {
+		for (Wall w : wallList) {
+			if (w.getId().equals(id)) {
+				w.toggleWallStatus();
+			}
+		}
+	}
+	
+	/**
+	 * Applies all forces necessary for simulation. Force calculations are in the Force class.
+	 * */
+	
 	public void applyForces() {
 		applyGravity();
-		applyViscosity();
 		applyCenterOfMass();
+		applyViscosity();
 		applyWallRepulsionForce();
 	}
 
+	/*
+	 * Loop through the massList for the application of each force.
+	 * */
 	
 	private void applyGravity() {
 		for (Mass m : massList) {
@@ -132,72 +103,21 @@ public class SimulationWorld extends World {
 		}
 	}
 	
-	/**
-	 * Gravity logic derived from F=m*a. The constant 'a' is not 
-	 * 9.8 meters per second per second. It is an arbitrary .01f, for simulation purposes.
-	 */
-	
-	private Vec2 forceGravity(Mass m) {
-		float mass = m.getBody().getMass();
-		return new Vec2(gravity.x * mass * g_scalar, gravity.y * mass
-				* g_scalar);
-	}
-
-	/**
-	 * Center of Mass (COM) is a force that pulls all objects towards the
-	 * collective center of mass. 
-	 * Find the location of the center of mass, and apply a force that directs
-	 * the masses toward that location.
-	 */
-	
 	private void applyCenterOfMass() {
-		Vec2 comLocation = getCOMLocation();
+	
 		for (Mass m : massList) {
 			Vec2 massLocation = m.getBody().getPosition();
-			Vec2 unitVec = Vectors.unitVector(massLocation, comLocation);
-			double dist = Math.sqrt(Math.pow(massLocation.x - comLocation.x, 2)
-					+ Math.pow(massLocation.y - comLocation.y, 2));
-			double scalar = Math.pow(1.0 / dist, com_exponent) * com_magnitude;
-			Vec2 force = new Vec2((float) (unitVec.x * scalar),
-					(float) (unitVec.y * scalar));
+			Vec2 force = forceCenterOfMass(m);
 			m.getBody().applyForce(force, massLocation);
 		}
 	}
-
-	private Vec2 getCOMLocation() {
-		float sumXCoordinates = 0, sumYCoordinates = 0, totalMass = 0;
-			for (Mass m : massList) {
-				sumXCoordinates += m.getBody().getPosition().x * m.getBody().getMass();
-				sumYCoordinates += m.getBody().getPosition().y * m.getBody().getMass();
-				totalMass += m.getBody().getMass();
-		}
-		float avgX = sumXCoordinates / totalMass;
-		float avgY = sumYCoordinates / totalMass;
-		return new Vec2(avgX, avgY);
-	}
-
-	
-	/**
-	 * Viscosity is a resistive force, and will oppose the object's direction of motion.
-	 * Take the object's velocity vector, reverse it and apply it to the object.
-	 */
 	
 	private void applyViscosity() {
 		for (Mass m : massList) {
-			Vec2 direction = m.getBody().getLinearVelocity();
-			Vec2 oppositeDirection = direction.negate(); 
-			float newX = (float) (oppositeDirection.x * viscosity * visc_scalar);
-			float newY = (float) (oppositeDirection.y * viscosity * visc_scalar);
-			Vec2 vForce = new Vec2(newX, newY);
-			m.getBody().applyForce(vForce, m.getBody().getPosition());	
+			Vec2 viscosityForce = forceViscosity(m);
+			m.getBody().applyForce(viscosityForce, m.getBody().getPosition()); 																	
 		}
 	}
-
-	/**
-	 * Force from a wall is constant along its length.
-	 * Add up the individual wall repulsion forces on a mass and apply the net force.
-	 * 
-	 */
 	
 	private void applyWallRepulsionForce() {
 		for (Mass m : massList) {
@@ -206,37 +126,17 @@ public class SimulationWorld extends World {
 			for (Wall w : wallList) {
 				if (w.isLeftOrRightWall()) {
 					if (w.getCollisionStatus()) {
-						xComponent += wallRepulsionForce(m, w);
+						xComponent += forceWallRepulsion(m, w);
 					}
 				} else {
 					if (w.getCollisionStatus()) {
-						yComponent += wallRepulsionForce(m, w);
+						yComponent += forceWallRepulsion(m, w);
 					}
 				}
 			}
 			m.getBody().applyForce(new Vec2(xComponent, yComponent),
 					m.getBody().getPosition());
 		}
-	}
-
-	private float wallRepulsionForce(Mass m, Wall w) {
-		float distance;
-		int sign;
-
-		if (w.isLeftOrRightWall()) {
-			distance = Math.abs(w.getBody().getPosition().x
-					- m.getBody().getPosition().x);
-			sign = (w.getBody().getPosition().x < m.getBody().getPosition().x ? 1
-					: -1);
-		} else {
-			distance = Math.abs(w.getBody().getPosition().y
-					- m.getBody().getPosition().y);
-			sign = (w.getBody().getPosition().y < m.getBody().getPosition().y ? 1
-					: -1);
-		}
-
-		return (float) (sign * w_scalar
-				* Math.pow(1 / distance, w.getExponent()) * w.getMagnitude());
 	}
 
 	/**
