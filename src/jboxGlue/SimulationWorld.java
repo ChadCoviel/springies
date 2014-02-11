@@ -158,14 +158,14 @@ public class SimulationWorld extends Forces {
 	 * Pixel amount to change the wall position by is the parameter.
 	 */
 	public void repositionWalls(double amountPixels) {
-		Collection<WallReposition> eggs = new ArrayList<WallReposition>();
+		Collection<WallReposition> movedWallList = new ArrayList<WallReposition>();
 		for (Wall w : wallList) {
-			eggs.add(w.newWall(amountPixels));
+			movedWallList.add(w.newWall(amountPixels));
 			w.remove();
 		}
 		Collection<Wall> newWalls = new ArrayList<Wall>();
-		for (WallReposition e : eggs) {
-			newWalls.add(e.placeNewWall());
+		for (WallReposition n : movedWallList) {
+			newWalls.add(n.placeNewWall());
 		}
 		wallList = newWalls;
 	}
