@@ -1,6 +1,8 @@
 springies
 =========
 
+**NOTE: We had a alot of trouble with GitHub for this project. While we got through the initial commit, merge and pull exercise that Professor Duvall showed us in recitation. We still ended up having trouble with merging with the master while we were working on the actual project. So we resorted to using our Macbooks' Airdrop utility to transfer code and get the project up and running. Once the project was done, we finally figured out how to merge with the master. This is why our GitHub data graphs for merges, commits and etc. looks so poor. We were GitHub illiterate for the majority of this project until the very end.**
+
 Starter code for Springies team project
 
 Initial Design Document - Springies
