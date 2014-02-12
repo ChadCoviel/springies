@@ -68,6 +68,7 @@ public class Springies extends UserControl implements Frames {
 		WorldManager.getWorld().applyForces();
 		checkMouseClick();
 		toggleForcesKeys();
+		toggleMuscleAmplitude(myParser);
 		changeWallSize();
 		moveObjects();
 		clearOrAddAssemblies();
