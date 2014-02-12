@@ -22,6 +22,10 @@ public class Muscle extends Spring {
 	public void setAmplitude(double amp) {
 		amplitude = amp;
 	}
+	
+	public double getAmplitude(){
+		return amplitude;
+	}
 
 	@Override
 	public void move() {
