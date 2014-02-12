@@ -1,6 +1,8 @@
 package springies;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import jboxGlue.*;
 import jgame.platform.JGEngine;
