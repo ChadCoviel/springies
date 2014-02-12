@@ -1,15 +1,18 @@
 package springies;
 
+import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import jboxGlue.SimulationWorld;
 import jboxGlue.WorldManager;
-
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
 import org.jbox2d.common.Vec2;
 import org.w3c.dom.NamedNodeMap;
@@ -69,9 +72,7 @@ public class Parser {
 		massMap.clear();
 		springList.clear();
 		try {
-			DOMParser parser = new DOMParser();
-			parser.parse(path);
-			NodeList root = parser.getDocument().getChildNodes();
+			NodeList root = buildDocument(path);
 			NodeList model = getNode("model", root).getChildNodes();
 			NodeList nodes = getNode("nodes", model).getChildNodes();
 			NodeList links = getNode("links", model).getChildNodes();
@@ -91,9 +92,7 @@ public class Parser {
 	public void parseEnvironmentXML(String path) {
 		SimulationWorld springiesWorld = WorldManager.getWorld();
 		try {
-			DOMParser parser = new DOMParser();
-			parser.parse(path);
-			NodeList root = parser.getDocument().getChildNodes();
+			NodeList root = buildDocument(path);
 			NodeList environment = getNode("environment", root).getChildNodes();
 
 			
@@ -268,6 +267,7 @@ public class Parser {
 		}
 		return "";
 	}
+	
 
 	protected String getNodeAttributes(String fieldName, String attributeName, NodeList nodes) {
 		for (int x = 0; x < nodes.getLength(); x++) {
@@ -321,6 +321,19 @@ public class Parser {
 			}
 		}
 		return "";
+	}
+	
+	private NodeList buildDocument(String docToBuild){
+		try{
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder(); 
+			Document doc = db.parse(new File(docToBuild));
+			return doc.getChildNodes();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	private Vec2 checkForOffScreenAndCorrect(double x, double y) {
