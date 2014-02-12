@@ -41,8 +41,8 @@ public class SimulationWorld extends Forces {
 		wallList = walls;
 	}
 	
-	public void setWallMultiplier(float multiplier) {
-		w_scalar = multiplier;
+	public void setWallScalar(float ws) {
+		w_scalar = ws;
 	}
 	
 	public Collection<Wall> getWalls() {
