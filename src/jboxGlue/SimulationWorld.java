@@ -23,10 +23,6 @@ public class SimulationWorld extends Forces {
 	
 	
 	private Collection<Wall> wallList;
-	//private float visc_scalar = Constants.VISCOSITY_SCALAR,
-	//				g_scalar = Constants.GRAVITY_SCALAR,
-	//				com_scalar = Constants.COM_SCALAR,
-	//				w_scalar = Constants.WALL_SCALAR;
 	
 
 	public SimulationWorld(AABB worldBounds, Vec2 gravity, boolean doSleep) {
