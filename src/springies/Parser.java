@@ -10,11 +10,13 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import 
 
 import jboxGlue.SimulationWorld;
 import jboxGlue.WorldManager;
 
 import org.jbox2d.common.Vec2;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
