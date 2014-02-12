@@ -21,6 +21,7 @@ public abstract class WallReposition {
 		myExponent = exponent;
 	}
 
+	/*Key method of changing the walls are the area size they enclose*/
 
 	public abstract Wall placeNewWall();
 
