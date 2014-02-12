@@ -21,14 +21,7 @@ public abstract class WallReposition {
 		myExponent = exponent;
 	}
 
-	/**
-	 * This is where the magic happens. The previous wall will have already been
-	 * destroyed, but the egg contains the ability to spawn a new wall here.
-	 * This will create the correct concrete Wall object to go with the type of
-	 * egg. i.e. a TopWallEgg will hatch a TopWall and so on.
-	 * 
-	 * @return A concrete Wall object
-	 */
+
 	public abstract Wall placeNewWall();
 
 	public String toString() {
