@@ -17,6 +17,9 @@ import jboxGlue.*;
 @SuppressWarnings("serial")
 public class Springies extends UserControl implements Frames {
 	private static Parser myParser;
+	private boolean gravityOn = false;
+	private boolean viscosityOn = false;
+	private boolean centerOfMassOn = false;
 
 	public Springies() {
 		// set the window size
@@ -55,7 +58,12 @@ public class Springies extends UserControl implements Frames {
 	 */
 	@Override
 	public void doFrame() {
-		
+		if(getKey('V'))
+			viscosityOn = !viscosityOn;
+		if(getKey('G'))
+			gravityOn = !gravityOn;
+		if(getKey('M'))
+			centerOfMassOn = !centerOfMassOn;
 		WorldManager.getWorld().step(1f, 1);
 		WorldManager.getWorld().applyForces();
 		checkMouseClick();
@@ -82,5 +90,9 @@ public class Springies extends UserControl implements Frames {
 	}
 	
 	@Override
-	public void paintFrame() {}
+	public void paintFrame() {
+		drawString("viscosity:"+viscosityOn,20, 20, -1);
+		drawString("gravity:"+gravityOn,20, 40, -1);
+		drawString("center of mass:"+centerOfMassOn,20, 60, -1);
+	}
 }
