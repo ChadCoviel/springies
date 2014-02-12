@@ -63,7 +63,7 @@ public class Forces extends World{
 		com_exponent = exponent;
 	}
 	
-	/*Value comparison for the gravity, viscosity and center of mass multipliers.*/
+	/*Value comparison for the gravity, viscosity and center of mass scalars.*/
 	
 	public void valueCOMScalar() {
 		com_scalar = (com_scalar == 0 ? Constants.COM_SCALAR : 0);
