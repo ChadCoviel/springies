@@ -11,7 +11,7 @@ import jgame.JGColor;
 
 public interface Constants {
 	
-	// Arbitrary force multipliers
+	// Arbitrary force scalars
 		public static final double DAMPING_SCALAR = .95;
 		public static final float VISCOSITY_SCALAR = 200;
 		public static final float SPRING_SCALAR = 100f;
