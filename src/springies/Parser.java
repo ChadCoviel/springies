@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import 
 
 import jboxGlue.SimulationWorld;
 import jboxGlue.WorldManager;
