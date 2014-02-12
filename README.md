@@ -1,7 +1,7 @@
 springies
 =========
 
-*We did not consult any other students or TA's. Chad met with Professor Duvall when he had a .jar import problem, and received some advice on making a new function for the DOMParser. We did use the following online resources:
+*We did not consult any other students or TAs. Chad met with Professor Duvall when he had a .jar import problem, and received some advice on making a new function for the DOMParser. We did use the following online resources:
 
 	http://www.jbox2d.org/processing/doc/index.html - Physics
 	http://www.13thmonkey.org/~boris/jgame/JGame/javadoc/overview-summary.html - jgame; jgame.impl; 		jgame.platform
