@@ -26,8 +26,7 @@ public abstract class WallReposition {
 	public abstract Wall placeNewWall();
 
 	public String toString() {
-		return String.format("EGG --> x: %f, y: %f, len: %f, thick: %f", myX,
-				myY, myHeight, myWidth);
+		return "Wall";
 	}
 
 }
