@@ -122,11 +122,14 @@ public class UserControl extends JGEngine{
 	
 	
 	public void toggleMuscleAmplitude(Parser myParser){
+		
+		List<Spring> springList = new ArrayList<Spring>();
+		springList = (List<Spring>) myParser.getSpringList();
+		
 		//Increase Muscle amplitude in all assemblies
 		if(getKey('+')){
 			clearKey('+');
-			List<Spring> springList = new ArrayList<Spring>();
-			springList = (List<Spring>) myParser.getSpringList();
+			
 			for(Spring s : springList){
 				if(s instanceof Muscle)
 					((Muscle) s).setAmplitude(((Muscle) s).getAmplitude()+Constants.AMPLITUDE_SCALAR);
@@ -135,8 +138,7 @@ public class UserControl extends JGEngine{
 		//Decrease Muscle amplitude in all assemblies
 		if(getKey('-')){
 			clearKey('-');
-			List<Spring> springList = new ArrayList<Spring>();
-			springList = (List<Spring>) myParser.getSpringList();
+			
 			for(Spring s : springList){
 				if(s instanceof Muscle)
 					((Muscle) s).setAmplitude(((Muscle) s).getAmplitude()-Constants.AMPLITUDE_SCALAR);
