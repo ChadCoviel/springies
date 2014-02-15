@@ -7,7 +7,7 @@ import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 
 
-import ourObjects.Constants;
+
 import ourObjects.Mass;
 import ourObjects.Spring;
 import walls.Wall;
