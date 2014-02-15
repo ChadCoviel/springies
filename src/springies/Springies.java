@@ -17,7 +17,7 @@ import jboxGlue.*;
 @SuppressWarnings("serial")
 public class Springies extends UserControl implements Frames {
 	private static Parser myParser;
-	private boolean gravityOn = false;
+	private boolean gravityOn = true;
 	private boolean viscosityOn = false;
 	private boolean centerOfMassOn = false;
 
